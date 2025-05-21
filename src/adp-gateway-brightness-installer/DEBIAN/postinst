@@ -1,0 +1,38 @@
+#!/bin/bash
+set -e
+echo "updating database..."
+echo "creating table..."
+docker exec -i mariadb-container mariadb -u root -p'8675309' -e "create table settings.brightness (id int not null auto_increment, value float not null default 0, primary key(id)) collate='utf8mb4_general_ci';"
+echo "table created"
+echo "initializing data..."
+docker exec -i mariadb-container mariadb -u root -p'8675309' -e "insert into settings.brightness (value) values (1.0);"
+echo "data initialized"
+echo "database updated"
+echo "creating api endpoints..."
+echo "creating settings read api endpoint..."
+mkdir /var/ADP_Gateway/html/settings
+cp /usr/brightness-api-staging/read.php /var/ADP_Gateway/html/settings/read.php
+cp /usr/brightness-api-staging/APISettingsRead.php /var/ADP_Gateway/html/php/APISettingsRead.php
+cp /usr/brightness-api-staging/APISettingsReadProcessData.php /var/ADP_Gateway/html/php/APISettingsReadProcessData.php
+cp /usr/brightness-api-staging/InterfaceSettingsBrightness.php /var/ADP_Gateway/html/php/InterfaceSettingsBrightness.php
+echo "settings read api endpoint created"
+echo "createing settings update api endpoint..."
+cp /usr/brightness-api-staging/update.php /var/ADP_Gateway/html/settings/update.php
+cp /usr/brightness-api-staging/APISettingsUpdate.php /var/ADP_Gateway/html/php/APISettingsUpdate.php
+echo "settings update api endpoint created"
+echo "updating sign data api..."
+mv /var/ADP_Gateway/html/php/PageSignAPIBuildQueries.php /var/ADP_Gateway/html/php/PageSignAPIBuildQueries.bak
+cp /usr/brightness-api-staging/PageSignAPIBuildQueries.php /var/ADP_Gateway/html/php/PageSignAPIBuildQueries.php
+mv /var/ADP_Gateway/html/php/RemoveNotInPlaylist.php /var/ADP_Gateway/html/php/RemoveNotInPlaylist.bak
+cp /usr/brightness-api-staging/RemoveNotInPlaylist.php /var/ADP_Gateway/html/php/RemoveNotInPlaylist.php
+mv /var/ADP_Gateway/html/php/InterfaceADP.php /var/ADP_Gateway/html/php/InterfaceADP.bak
+cp /usr/brightness-api-staging/InterfaceADP.php /var/ADP_Gateway/html/php/InterfaceADP.php
+mv /var/ADP_Gateway/html/php/PageSignAPIPacker.php /var/ADP_Gateway/html/php/PageSignAPIPacker.bak
+cp /usr/brightness-api-staging/PageSignAPIPacker.php /var/ADP_Gateway/html/php/PageSignAPIPacker.php
+echo "sign data api updated"
+echo "updating renderer..."
+mv /var/ADP_Gateway/html/sign/style.css /var/ADP_Gateway/html/sign/style.bak
+cp /usr/brightness-api-staging/style.css /var/ADP_Gateway/html/sign/style.css
+mv /var/ADP_Gateway/html/sign/index.js /var/ADP_Gateway/html/sign/indexjs.bak
+cp /usr/brightness-api-staging/index.js /var/ADP_Gateway/html/sign/index.js
+echo "renderer updated"

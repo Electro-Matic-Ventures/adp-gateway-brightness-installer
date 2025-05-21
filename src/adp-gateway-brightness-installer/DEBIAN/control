@@ -1,0 +1,7 @@
+Package: adp-gateway-brightness-installer
+Version: 1.0
+Section: base
+Priority: optional
+Architecture: all
+Maintainer: John Machado <jrmachado@electro-matic.com>
+Description: install update for api based brightness control
