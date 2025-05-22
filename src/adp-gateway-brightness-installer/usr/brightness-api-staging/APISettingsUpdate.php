@@ -7,10 +7,10 @@
     class APISettingsUpdate {	
         
         public static function go($data) {
-            if ($data["brightness"]) {
+            if (isset($data["brightness"]->value)) {
             APISettingsUpdate::update_brightness($data["brightness"]);
             }
-            if ($data["dimensions"]) {
+            if (isset($data["dimensions"]->width) && isset($data["dimensions"]->height)) {
             APISettingsUpdate::update_dimensions($data["dimensions"]);
             }
             return;

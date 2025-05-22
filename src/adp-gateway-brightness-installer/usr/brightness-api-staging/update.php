@@ -11,8 +11,16 @@
     $data = file_get_contents(("php://input"));
     if ($data != "") {
         $decoded = json_decode($data);
-        $packed["brightness"] = new InterfaceSettingsBrightness($decoded->brightness);
-        $packed["dimensions"] = new InterfaceSettingsDimensions($decoded->dimensions);
+        if (isset($decoded->brightness)) {
+            $packed["brightness"] = new InterfaceSettingsBrightness($decoded->brightness);
+        } else {
+            $packed["brightness"] = new InterfaceSettingsBrightness();
+        }
+        if (isset($decoded->dimensions)) {
+            $packed["dimensions"] = new InterfaceSettingsDimensions($decoded->dimensions);
+        } else {
+            $packed["dimensions"] = new InterfaceSettingsDimensions();
+        }
         APISettingsUpdate::go($packed);
         echo $data;
         http_response_code(201);
