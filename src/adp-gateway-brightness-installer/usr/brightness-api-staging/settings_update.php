@@ -22,7 +22,7 @@
             $packed["dimensions"] = new InterfaceSettingsDimensions();
         }
         APISettingsUpdate::go($packed);
-        echo $data;
+        echo json_encode($data);
         http_response_code(201);
     } else {
         http_response_code(400);
